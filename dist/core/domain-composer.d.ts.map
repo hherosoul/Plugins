@@ -1,1 +1,0 @@
-{"version":3,"file":"domain-composer.d.ts","sourceRoot":"","sources":["../../src/core/domain-composer.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,iBAAiB,EAAE,aAAa,EAAsD,MAAM,UAAU,CAAC;AAErH,qBAAa,cAAc;IACzB,YAAY,CAAC,MAAM,EAAE,iBAAiB,EAAE,GAAG,aAAa;CAoDzD"}
