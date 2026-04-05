@@ -1,0 +1,31 @@
+{
+  "name": "@smartcontext/openclaw-plugin",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "openclaw": {
+    "extensions": ["./dist/index.js"],
+    "compat": {
+      "pluginApi": ">=2026.4.2",
+      "minGatewayVersion": "2026.4.2"
+    },
+    "build": {
+      "openclawVersion": "2026.4.2",
+      "pluginSdkVersion": "2026.4.2"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "openclaw": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.7",
+    "vitest": "^3.0",
+    "@types/node": "^22"
+  }
+}
