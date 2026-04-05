@@ -316,41 +316,6 @@ npm install
 
 # 2. Build the project
 npm run build
-
-# 3. Run tests
-npm test
-
-# 4. Development mode (watch for changes)
-npm run test:watch
-```
-
-### Test Coverage
-
-```bash
-# Generate coverage report
-npm run test:coverage
-
-# View coverage report
-open coverage/index.html
-```
-
-### Publishing to ClawHub
-
-```bash
-# 1. Login to ClawHub
-clawhub login
-
-# 2. Create organization (if not exists)
-clawhub org create smartcontext
-
-# 3. Package the plugin
-clawhub package pack .
-
-# 4. Publish (dry run test)
-clawhub package publish smartcontext/smartcontext --dry-run
-
-# 5. Official publish
-clawhub package publish smartcontext/smartcontext
 ```
 
 ### User Installation
