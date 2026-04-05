@@ -9,7 +9,7 @@
 
 **Professional Conversation Navigation System for OpenClaw**
 
-[Features](#features) • [Quick Start](#quick-start) • [Documentation](#documentation) • [Contributing](#contributing)
+[Features](#features) • [Quick Start](#quick-start) • [Contributing](#contributing)
 
 </div>
 
@@ -83,67 +83,52 @@ Supports activating multiple domains simultaneously with automatic conflict reso
 
 ### Installation
 
-1. **Configure the plugin in OpenClaw:**
-
-```typescript
-// openclaw.config.ts
-{
-  plugins: {
-    entries: {
-      "smartcontext": {
-        enabled: true,
-        config: {
-          activeDomains: ["software-engineering"],
-          roleTags: ["frontend"],
-          pinnedItems: ["This project uses TypeScript"]
-        }
-      }
-    }
-  }
-}
-```
-
-2. **Restart OpenClaw:**
+Install the plugin using OpenClaw's plugin manager:
 
 ```bash
-openclaw restart
+openclaw plugins install clawhub:smartcontext/smartcontext
 ```
+
+Or using the package name directly:
+
+```bash
+openclaw plugins install @smartcontext/openclaw-plugin
+```
+
+After installation, restart the OpenClaw gateway:
+
+```bash
+openclaw gateway restart
+```
+
+**Optional:** Configure your initial settings using the commands in [Basic Usage](#basic-usage).
 
 ### Basic Usage
 
 ```bash
-# View current configuration
-/smartcontext-config
+# Configuration commands
+/smartcontext-config                    # View current configuration
+/smartcontext-reset                     # Reset to default configuration
 
-# List available domains
-/smartcontext-list
+# Skill management commands
+/smartcontext-list-skills               # List all available skills
+/smartcontext-use <skill-id>            # Use only the specified skill
+/smartcontext-add <skill-id>            # Add skill
+/smartcontext-remove <skill-id>         # Remove skill
+/smartcontext-install-skill <name> <path>  # Install new skill
+/smartcontext-uninstall-skill <name>    # Uninstall skill
 
-# Switch to specific domain (replace others)
-/smartcontext-use software-engineering
+# Role management commands
+/smartcontext-set-role <tag1> <tag2>    # Set role tags (overwrites)
+/smartcontext-add-role <tag1> <tag2>    # Add role tags
+/smartcontext-remove-role <tag1> <tag2> # Remove role tags
+/smartcontext-clear-role                 # Clear all role tags
 
-# Add domain
-/smartcontext-add bioinformatics
-
-# Remove domain
-/smartcontext-remove software-engineering
-
-# Set user role tags (replace existing)
-/smartcontext-set-role frontend typescript react
-
-# Add role tag(s)
-/smartcontext-add-role backend
-
-# Remove role tag(s)
-/smartcontext-remove-role frontend
-
-# Clear all role tags
-/smartcontext-clear-role
-
-# Pin important content
-/smartcontext-pin "This project must support offline functionality"
-
-# Unpin content by index (0-based)
-/smartcontext-unpin 0
+# Pinned content commands
+/smartcontext-pin "content"              # Pin important content
+/smartcontext-show-pinned                # Show all pinned content
+/smartcontext-unpin-at <index>           # Unpin at index (1-based)
+/smartcontext-unpin-all                  # Unpin all content
 ```
 
 ---
@@ -155,43 +140,41 @@ smartcontext-plugin/
 ├── openclaw.plugin.json          # Plugin Manifest (required)
 ├── package.json                  # npm package configuration
 ├── tsconfig.json                 # TypeScript configuration
-├── vitest.config.ts              # Test configuration
-├── README.md                     # Project documentation (Chinese)
+├── README.md                     # This file
 │
 ├── src/
-│   ├── index.ts                  # Plugin entry — definePluginEntry
+│   ├── index.ts                  # Plugin entry
 │   ├── types.ts                  # Global type definitions
 │   │
-│   ├── core/
-│   │   ├── guideline-engine.ts   # Guideline generation engine (core: before_prompt_build hook)
-│   │   ├── skill-loader.ts       # Skill discovery and loading
-│   │   ├── domain-composer.ts    # Multi-domain rule composition
-│   │   ├── role-adapter.ts       # User role adaptation
-│   │   ├── prompt-builder.ts     # Prompt text builder
-│   │   ├── skill-discovery.ts    # Skill discoverer
-│   │   └── skill-manager.ts      # Skill manager
+│   ├── core/                     # Core modules
+│   │   ├── guideline-engine.ts
+│   │   ├── skill-loader.ts
+│   │   ├── domain-composer.ts
+│   │   ├── role-adapter.ts
+│   │   ├── prompt-builder.ts
+│   │   ├── skill-discovery.ts
+│   │   └── skill-manager.ts
 │   │
-│   ├── commands/
-│   │   └── index.ts              # Command registration entry
+│   ├── commands/                 # User commands
+│   │   └── index.ts
 │   │
-│   ├── config/
-│   │   ├── schema.ts             # configSchema definition (JSON Schema + Zod)
-│   │   ├── defaults.ts           # Default configuration values
-│   │   └── store.ts              # Runtime config read/write (disk-based persistence)
+│   ├── config/                   # Configuration management
+│   │   ├── schema.ts
+│   │   ├── defaults.ts
+│   │   └── store.ts
 │   │
-│   └── utils/
-│       ├── markdown-parser.ts    # Skill Markdown → structured data parser
-│       ├── logger.ts             # Logging utility (api.runtime.logging)
-│       └── cache.ts              # Memory cache (Skill rule cache, etc.)
+│   └── utils/                    # Utilities
+│       ├── markdown-parser.ts
+│       ├── logger.ts
+│       └── cache.ts
 │
-├── skills/                       # Built-in Skill templates
+├── skills/                       # Built-in skills
 │   ├── smartcontext-general-purpose/
 │   ├── smartcontext-software-engineering/
 │   ├── smartcontext-bioinformatics/
 │   └── smartcontext-floriculture/
 │
-│
-├── dist/                         # Build output
+└── dist/                         # Build output
 ```
 
 ---
@@ -234,52 +217,66 @@ smartcontext-plugin/
 
 ### Creating Custom Skills
 
-1. **Create Skill directory:**
+#### Step 1: Create SKILL.md File
 
-```bash
-mkdir -p skills/smartcontext-my-domain
-```
-
-2. **Create SKILL.md file:**
+First, create your skill file. **Important Notes:**
+- ⚠️ **Must use `SKILL.md` as the filename** (exact capitalization)
+- Skill name can only contain lowercase letters, numbers, and hyphens
 
 ```markdown
-# SmartContext Skill: My Domain
+# SmartContext Skill: Writing
 
 ## Domain Summary
 
-Brief description of your domain (1-3 sentences).
+Guidelines for writing and content creation, helping LLMs focus on key content elements, style requirements, and quality standards.
 
 ## Priority Declaration
 
-When this domain's rules conflict with others, priority: **high**
+When this domain's rules conflict with others, priority: **medium**
 
 ## Priority Guidelines (Tier 0 → Tier 4)
 
 ### Tier 0 — Always Prioritize (Never Overlook)
-- Rule item 1
-- Rule item 2
+- Target audience and content purpose
+- Tone and voice requirements
+- Content format specifications
+- Any "must" or "must not" constraints
 
 ### Tier 1 — Highest Priority Focus
-- Rule item
+- Key messages and core arguments
+- Content structure and outline
+- Fact-checking and accuracy requirements
+- Style guide compliance
 
 ### Tier 2 — High Priority Attention
-- Rule item
+- Supporting evidence and references
+- Word count and length requirements
+- SEO keywords and meta descriptions
+- Call-to-action elements
 
 ### Tier 3 — Keep In Mind
-- Rule item
+- Grammar and spelling conventions
+- Brand voice guidelines
+- Content calendar deadlines
+- Platform-specific formatting
 
 ### Tier 4 — Can Reference Briefly
-- Rule item
+- General writing tips
+- Thesaurus suggestions
+- Common grammar rules
+- Generic templates
 
 ## Dynamic Adjustment Rules
 
-1. **Rule Type**: Description
-2. ...
+1. **Reference Frequency Boost**: Content repeatedly mentioned by user → +1 Tier
+2. **Draft Iteration Focus**: When discussing revisions → draft feedback +1 Tier
+3. **Audience-Specific Boost**: When target audience is mentioned → audience-related rules +1 Tier
 
 ## Domain-Specific Rules
 
-1. Rule
-2. ...
+1. Always prioritize clarity over complexity
+2. Maintain consistent terminology throughout
+3. Ensure actionable takeaways for the reader
 
 ## User Role Adaptation
 
@@ -287,22 +284,72 @@ When this domain's rules conflict with others, priority: **high**
 
 | Tag | Enhanced Items | Adjustment |
 |-----|----------------|------------|
-| {tag} | {pattern} | Related items +1 Tier |
+| `copywriter` | Tone, voice, brand guidelines | Related items +1 Tier |
+| `technical-writer` | Accuracy, technical precision, documentation structure | Related items +1 Tier |
+| `content-marketer` | SEO, CTAs, conversion elements | Related items +1 Tier |
 
 ### Fallback Rule
 Unconfigured roles use default Tier execution without adjustment.
 
 ## Cross-Domain Collaboration
 
-When collaborating with {target domain}:
-- Collaboration rule
+When collaborating with software-engineering:
+- API documentation accuracy takes priority over stylistic preferences
+- Technical accuracy must be verified before publishing
 ```
 
-3. **Enable the domain:**
+#### Step 2: Install the Skill
+
+Use the install command to add your skill to the plugin. The plugin will automatically create the proper directory structure:
 
 ```bash
-/smartcontext-add my-domain
+# Syntax
+/smartcontext-install-skill <skill-name> <SKILL.md-path>
+
+# Example (install the writing skill we just created)
+/smartcontext-install-skill writing /Users/you/Desktop/writing/SKILL.md
 ```
+
+#### Step 3: Enable the Skill
+
+After installation, enable your new skill:
+
+```bash
+# Add to existing active domains
+/smartcontext-add writing
+
+# Or use only this skill
+/smartcontext-use writing
+```
+
+#### Uninstalling a Skill
+
+```bash
+/smartcontext-uninstall-skill writing
+```
+
+### SKILL.md Required Sections
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| `# SmartContext Skill: {Name}` | ✅ Yes | Title line, exact format |
+| `## Domain Summary` | ✅ Yes | 1-3 sentence domain description |
+| `## Priority Declaration` | ✅ Yes | Priority declaration |
+| `## Priority Guidelines (Tier 0 → Tier 4)` | ✅ Yes | 5-tier priority guidelines |
+| `### Tier 0` | ✅ Yes | Always prioritize content |
+| `### Tier 1-4` | ⚠️ Recommended | Other tiers (at minimum Tier 0 is required) |
+| `## Dynamic Adjustment Rules` | ❌ Optional | Dynamic adjustment rules |
+| `## Domain-Specific Rules` | ❌ Optional | Domain-specific rules |
+| `## User Role Adaptation` | ❌ Optional | User role adaptation |
+| `## Cross-Domain Collaboration` | ❌ Optional | Cross-domain collaboration |
+
+### Reference Existing Skills
+
+For inspiration, look at the built-in skills in the `skills/` directory:
+- `smartcontext-general-purpose/` - General purpose guidelines
+- `smartcontext-software-engineering/` - Software engineering domain
+- `smartcontext-bioinformatics/` - Bioinformatics domain
+- `smartcontext-floriculture/` - Floriculture domain
 
 ---
 
@@ -371,9 +418,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or issues, please:
 
-1. Check the [documentation](papers/)
-2. Search existing [issues](../../issues)
-3. Open a new [issue](../../issues/new)
+1. Search existing [issues](../../issues)
+2. Open a new [issue](../../issues/new)
 
 ---
 
