@@ -122,59 +122,7 @@ ${available.map((skillId) => {
     }
   });
 
-  api.registerCommand({
-    name: "dac-install-skill",
-    description: "Install a new skill",
-    acceptsArgs: true,
-    handler: (ctx: PluginCommandContext) => {
-      const args = ctx.args ? ctx.args.trim().split(/\s+/) : [];
-      const name = args[0];
-      const path = args.slice(1).join(" ");
 
-      if (!name || !path) {
-        return {
-          text: "用法: /dac-install-skill <name> <path-to-SKILL.md>",
-          isError: true
-        };
-      }
-
-      const result = skillManager.installSkill(name, path);
-      if (result) {
-        return { text: `✅ 已安装技能: ${result}` };
-      } else {
-        return { text: "❌ 安装技能失败", isError: true };
-      }
-    }
-  });
-
-  api.registerCommand({
-    name: "dac-uninstall-skill",
-    description: "Uninstall a skill",
-    acceptsArgs: true,
-    handler: (ctx: PluginCommandContext) => {
-      const args = ctx.args ? ctx.args.trim().split(/\s+/) : [];
-      const skillId = args[0];
-
-      if (!skillId) {
-        return {
-          text: "用法: /dac-uninstall-skill <skill-id>",
-          isError: true
-        };
-      }
-
-      const result = skillManager.uninstallSkill(skillId);
-      if (result) {
-        const config = configStore.loadConfig();
-        configStore.saveConfig({
-          ...config,
-          activeDomains: config.activeDomains.filter((id) => id !== skillId)
-        });
-        return { text: `✅ 已卸载技能: ${skillId}` };
-      } else {
-        return { text: "❌ 卸载技能失败", isError: true };
-      }
-    }
-  });
 
   api.registerCommand({
     name: "dac-config",
