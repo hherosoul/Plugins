@@ -90,10 +90,8 @@ Install this plugin in OpenClaw.
 | `/dac-use <skill-id>` | 切换到单一技能（禁用其他） | `/dac-use dac-software-engineering` |
 | `/dac-add <skill-id>` | 添加技能到已启用列表 | `/dac-add dac-floriculture` |
 | `/dac-remove <skill-id>` | 从已启用列表移除技能 | `/dac-remove dac-floriculture` |
-| `/dac-install-skill <name> <path>` | 安装新技能 | `/dac-install-skill my-skill ~/path/to/skill` |
-| `/dac-uninstall-skill <skill-id>` | 卸载技能 | `/dac-uninstall-skill my-skill` |
 | `/dac-config` | 查看当前配置 | `/dac-config` |
-| `/dac-set-compaction-level <level>` | 设置压缩级别（0-4） | `/dac-set-compaction-level 2` |
+| `/dac-set-compaction-level <level>` | 设置压缩级别（conservative|balanced|aggressive） | `/dac-set-compaction-level balanced` |
 | `/dac-reset` | 重置为默认配置 | `/dac-reset` |
 
 ---
@@ -104,10 +102,8 @@ Install this plugin in OpenClaw.
 | `/dac-use <skill-id>` | Switch to single skill (disable others) | `/dac-use dac-software-engineering` |
 | `/dac-add <skill-id>` | Add skill to enabled list | `/dac-add dac-floriculture` |
 | `/dac-remove <skill-id>` | Remove skill from enabled list | `/dac-remove dac-floriculture` |
-| `/dac-install-skill <name> <path>` | Install new skill | `/dac-install-skill my-skill ~/path/to/skill` |
-| `/dac-uninstall-skill <skill-id>` | Uninstall skill | `/dac-uninstall-skill my-skill` |
 | `/dac-config` | View current config | `/dac-config` |
-| `/dac-set-compaction-level <level>` | Set compaction level (0-4) | `/dac-set-compaction-level 2` |
+| `/dac-set-compaction-level <level>` | Set compaction level (conservative|balanced|aggressive) | `/dac-set-compaction-level balanced` |
 | `/dac-reset` | Reset to default config | `/dac-reset` |
 
 ---
@@ -163,9 +159,34 @@ Uses `before_prompt_build` hook to automatically inject domain rules before each
 ### 技能目录结构 | Skill Directory Structure
 
 ```
-my-domain-skill/
-└── SKILL.md
+skills/
+└── dac-my-domain/
+    └── SKILL.md
 ```
+
+### 手动安装自定义技能 | Manually Install Custom Skill
+
+1. **创建技能目录** | **Create skill directory**
+   
+   在插件的 `skills/` 目录下创建新文件夹，命名为 `dac-<your-domain-name>`：
+   
+   Create a new folder under the plugin's `skills/` directory, named `dac-<your-domain-name>`:
+   
+   ```
+   skills/dac-my-domain/
+   ```
+
+2. **创建 SKILL.md 文件** | **Create SKILL.md file**
+   
+   在该目录下创建 `SKILL.md` 文件。
+
+   Create a `SKILL.md` file in that directory.
+
+3. **重启 OpenClaw** 或 **重新加载插件** | **Restart OpenClaw** or **reload plugin**
+   
+   插件会自动发现新技能。
+
+   The plugin will automatically discover the new skill.
 
 ### 使用大模型生成领域规则 | Use LLM to Generate Domain Rules
 
@@ -284,27 +305,13 @@ description: "My domain rules for intelligent context compaction: preserves core
 - [ ] Side comments and personal anecdotes
 ```
 
-### 安装自定义技能 | Install Custom Skill
-
-```
-/dac-install-skill my-domain ~/path/to/my-domain-skill
-```
-
 ---
 
 ## 📊 配置持久化 | Config Persistence
 
-配置自动保存在 `~/.openclaw/workspace/dac-config.json`，包括：
-- 当前启用的领域列表
-- 压缩级别设置
-- 已安装的技能列表
+配置自动保存在插件的状态目录中的 `config.json`。
 
----
-
-Config is automatically saved in `~/.openclaw/workspace/dac-config.json`, including:
-- Currently enabled domain list
-- Compaction level settings
-- Installed skill list
+Config is automatically saved in `config.json` under the plugin's state directory.
 
 ---
 
@@ -320,15 +327,17 @@ See [Test Core Cases Documentation](./docs/TESTING.md).
 
 - 领域规则会影响所有 LLM 调用，包括压缩和正常对话
 - 多个领域的规则会自动合并，按优先级处理
-- 建议在高优先级任务中使用高压缩级别（2-3）
-- 普通对话可以使用低压缩级别（0-1）
+- 建议在高优先级任务中使用高压缩级别（balanced/aggressive）
+- 普通对话可以使用低压缩级别（conservative）
+- 手动安装自定义技能时，请确保 SKILL.md 文件不包含任何敏感信息
 
 ---
 
 - Domain rules affect all LLM calls, including compaction and normal conversations
 - Rules from multiple domains auto-merge and are processed by priority
-- Recommend using high compaction levels (2-3) for high-priority tasks
-- Normal conversations can use low compaction levels (0-1)
+- Recommend using higher compaction levels (balanced/aggressive) for high-priority tasks
+- Normal conversations can use lower compaction levels (conservative)
+- When manually installing custom skills, ensure the SKILL.md file does not contain any sensitive information
 
 ---
 

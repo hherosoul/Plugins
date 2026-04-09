@@ -2,7 +2,7 @@
   "id": "domainawarecompaction",
   "name": "DomainAwareCompaction — 领域感知压缩",
   "description": "OpenClaw插件，通过before_compaction钩子注入精简的SKILL.md规则，让大模型直接理解领域规则。",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "enabledByDefault": false,
   "skills": ["dac-general-purpose", "dac-software-engineering", "dac-floriculture", "dac-bioinformatics"],
   "configSchema": {
