@@ -2,7 +2,7 @@
   "id": "smartcontext",
   "name": "SmartContext — Intelligent Conversation Guidelines",
   "description": "Injects domain-specific, tiered guidelines into each conversation to help LLM prioritize and focus on what's important.",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "enabledByDefault": false,
   "skills": ["smartcontext-software-engineering"],
   "configSchema": {
