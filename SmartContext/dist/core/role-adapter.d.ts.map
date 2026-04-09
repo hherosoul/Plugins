@@ -1,1 +1,0 @@
-{"version":3,"file":"role-adapter.d.ts","sourceRoot":"","sources":["../../src/core/role-adapter.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,aAAa,EAAkB,MAAM,UAAU,CAAC;AAE9D,qBAAa,WAAW;IACtB,OAAO,CAAC,SAAS,CAkDf;IAEF,KAAK,CAAC,KAAK,EAAE,aAAa,EAAE,QAAQ,EAAE,MAAM,EAAE,GAAG,aAAa;IA8B9D,OAAO,CAAC,cAAc;CAqBvB"}
